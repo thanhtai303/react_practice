@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Container,
   Card,
@@ -10,45 +9,27 @@ import {
 import { Plus as AddIcon } from "lucide-react";
 import UserTable from "./components/UserTable";
 import AddUserDialog from "./components/AddUserDialog";
-import type { User } from "./interfaces/User";
 import EditUserDialog from "./components/EditUserDialog";
+import { useUserStore } from "./store/UserStore";
+import type { User } from "./interfaces/User";
 
 function App() {
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [users, setUsers] = useState<User[]>([
-    {
-      name: "Tai Nguyen Thanh",
-      age: 30,
-      email: "tai@gmail.com",
-      phone: "123-456-7890",
-    },
-    {
-      name: "Nhat Minh Nguyen",
-      age: 25,
-      email: "nhat@gmail.com",
-      phone: "987-654-3210",
-    },
-  ]);
+  const {
+    users,
+    editingUser,
+    isAddDialogOpen,
+    deleteUser,
+    updateUser,
+    setEditingUser,
+    setAddDialogOpen,
+  } = useUserStore();
 
-  const handleAddUser = (user: User) => {
-    setUsers((prev) => [...prev, user]);
-    setIsAddOpen(false);
-  };
-
-  const handleDeleteUser = (email: string) => {
-    setUsers((prev) => prev.filter((u) => u.email !== email));
-  };
-
-  const handleEditUser = (user: User) => {
+  const handleEdit = (user: User) => {
     setEditingUser(user);
   };
 
-  const handleUpdateUser = (updated: User) => {
-    setUsers((prev) =>
-      prev.map((u) => (u.email === updated.email ? updated : u))
-    );
-    setEditingUser(null);
+  const handleAddUser = (user: User) => {
+    useUserStore.getState().addUser(user);
   };
 
   return (
@@ -66,7 +47,7 @@ function App() {
                 variant="contained"
                 style={{ backgroundColor: "green" }}
                 startIcon={<AddIcon />}
-                onClick={() => setIsAddOpen(true)}
+                onClick={() => setAddDialogOpen(true)}
               >
                 Add User
               </Button>
@@ -75,24 +56,24 @@ function App() {
           <CardContent>
             <UserTable
               users={users}
-              onEdit={handleEditUser}
-              onDelete={handleDeleteUser}
+              onEdit={handleEdit}
+              onDelete={deleteUser}
             />
 
             <EditUserDialog
               user={editingUser}
               onClose={() => setEditingUser(null)}
-              onSave={handleUpdateUser}
+              onSave={updateUser}
             />
           </CardContent>
         </Card>
-      </Container>
 
-      <AddUserDialog
-        open={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
-        onAddUser={handleAddUser}
-      />
+        <AddUserDialog
+          open={isAddDialogOpen}
+          onClose={() => setAddDialogOpen(false)}
+          onAddUser={handleAddUser}
+        />
+      </Container>
     </Box>
   );
 }

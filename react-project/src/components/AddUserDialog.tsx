@@ -19,15 +19,14 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
   const userEmail = useRef<HTMLInputElement>(null);
   const userPhone = useRef<HTMLInputElement>(null);
 
-  const validateUser = () => {
+  const validateUser = (): boolean => {
     if (
       !userName.current ||
       !userAge.current ||
       !userEmail.current ||
       !userPhone.current
-    ) {
+    )
       return false;
-    }
 
     const name = userName.current.value.trim();
     const age = Number(userAge.current.value);
@@ -66,14 +65,13 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
     if (!validateUser()) return;
 
     const newUser: User = {
-      name: userName.current!.value,
+      name: userName.current!.value.trim(),
       age: Number(userAge.current!.value),
-      email: userEmail.current!.value,
-      phone: userPhone.current!.value,
+      email: userEmail.current!.value.trim(),
+      phone: userPhone.current!.value.trim(),
     };
 
     onAddUser(newUser);
-
     userName.current!.value = "";
     userAge.current!.value = "";
     userEmail.current!.value = "";
@@ -116,7 +114,6 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
           margin="normal"
           placeholder="Enter name"
         />
-
         <TextField
           inputRef={userAge}
           label="Age"
@@ -125,7 +122,6 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
           margin="normal"
           placeholder="Enter age"
         />
-
         <TextField
           inputRef={userEmail}
           label="Email"
@@ -134,7 +130,6 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
           margin="normal"
           placeholder="Enter email"
         />
-
         <TextField
           inputRef={userPhone}
           label="Phone"
@@ -149,7 +144,7 @@ function AddUserDialog({ open, onClose, onAddUser }: AddUserDialogProps) {
         <Button onClick={handleClose} color="inherit">
           Cancel
         </Button>
-        <Button onClick={handleAddUser} variant="contained" color="primary">
+        <Button onClick={handleAddUser} variant="contained">
           Add User
         </Button>
       </DialogActions>

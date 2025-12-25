@@ -35,7 +35,6 @@ function UserTable({ users, onEdit, onDelete }: UserTableProps) {
 
   const handleDelete = () => {
     if (!selectedEmail) return;
-
     const ok = window.confirm("Are you sure you want to delete this user?");
     if (ok) {
       onDelete(selectedEmail);
@@ -55,12 +54,7 @@ function UserTable({ users, onEdit, onDelete }: UserTableProps) {
         <TableHead>
           <TableRow>
             {["Name", "Age", "Email", "Phone", "Action"].map((h) => (
-              <TableCell
-                key={h}
-                sx={{
-                  fontWeight: 600,
-                }}
-              >
+              <TableCell key={h} sx={{ fontWeight: 600 }}>
                 {h}
               </TableCell>
             ))}
